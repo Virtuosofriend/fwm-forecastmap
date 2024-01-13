@@ -10,12 +10,12 @@
             >
                 Αποθήκευση
             </button>
-            <button 
+            <!-- <button 
                 class="bg-red-900 text-white rounded p-2 text-sm font-bold"
                 @click="populateData"
             >
                 populate
-            </button>
+            </button> -->
         </div>
         <section class="overflow-y-auto sidebar">
             <form>
@@ -273,21 +273,21 @@ watch(date_range, (newVal) => {
 const populateDatesData = (property: keyof ForecastHourSchema & string, val: string) => {
     formDates[property] = val;
 };
-const populateData = () => {
-    for(let value in formData){
-        if("tmax" in formData[value]) {
-            formData[value].tmax = 1;
-            formData[value].tmin = 1;
-            formData[value].weatherConditions = "day/sunny";
-        }
-        if("wmax" in formData[value]) {
-            formData[value].wmax = 4;
-            formData[value].wmin = 1;
-            formData[value].windDirection = 90;
-        }
-    }
+// const populateData = () => {
+//     for(let value in formData){
+//         if("tmax" in formData[value]) {
+//             formData[value].tmax = 1;
+//             formData[value].tmin = 1;
+//             formData[value].weatherConditions = "day/sunny";
+//         }
+//         if("wmax" in formData[value]) {
+//             formData[value].wmax = 4;
+//             formData[value].wmin = 1;
+//             formData[value].windDirection = 90;
+//         }
+//     }
 
-};
+// };
 </script>
 
 <style scoped>
