@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import type { FormDataSchema } from "@/types";
+import type { FormDataSchema, ForecastWarningsSchema } from "@/types";
 import type { Map } from "leaflet";
 
 interface ForecastState {
     forecastDetails: FormDataSchema,
-    map: Map | null
+    map: Map | null,
+    warningLocations: ForecastWarningsSchema[]
 }
 
 export const useForecastDataStore = defineStore("forecastData", {
@@ -20,6 +21,7 @@ export const useForecastDataStore = defineStore("forecastData", {
                 data: {},
             },
             map: null,
+            warningLocations: [],
         };
     },
     actions: {
@@ -28,6 +30,9 @@ export const useForecastDataStore = defineStore("forecastData", {
         },
         setMap(map: Map) {
             this.map = map;
+        },
+        setWarningLocations(location: ForecastWarningsSchema) {
+            this.warningLocations.push(location);
         },
     },
 });

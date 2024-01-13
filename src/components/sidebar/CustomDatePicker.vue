@@ -37,3 +37,12 @@ withDefaults(defineProps<{
 
 const inputDate = defineModel<string | string[] | null>();
 </script>
+
+<style>
+.dp__menu {
+    font-family: 'Manrope';
+}
+.dp__input {
+    font-family: 'Manrope';
+}
+</style>

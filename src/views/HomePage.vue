@@ -14,10 +14,15 @@
                 <img :src="menuIcon">
             </button>
         </div>
-        <TheMap>
+        <TheMap
+            @map-click="openModal"
+        >
             <template #default>
                 <div class="absolute top-2 left-2 z-[1000]">
-                    <MapInfo v-if="forecastDetails.dates.created || forecastDetails.dates.forecast_date || forecastDetails.dates.forecast_end_hour || forecastDetails.dates.forecast_start_hour"></MapInfo>
+                    <MapInfo 
+                        v-if="forecastDetails.dates.created || forecastDetails.dates.forecast_date || 
+                        forecastDetails.dates.forecast_end_hour || forecastDetails.dates.forecast_start_hour"
+                    ></MapInfo>
                     <MapLegend class="mt-2"></MapLegend>
                 </div>
                 <MapMarker 
@@ -73,6 +78,26 @@
                         </div>
                     </l-icon>
                 </MapMarker>
+                <MapMarker
+                    v-for="(warning,index) in warningLocations"
+                    :key="index"
+                    :location="warning.location"
+                    :draggable="true"
+                >
+                    <l-icon :icon-size="[120,10]">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="w-10 h-10">
+                                <img 
+                                    :src="`icons/warnings/${ warning.icon }.png`" 
+                                    class="!w-full"
+                                />
+                            </div>
+                            <div class="">
+                                <p class="bg-white/50 text-red-700 px-2 rounded font-bold">{{ warning.comment }}</p>
+                            </div>
+                        </div>
+                    </l-icon>
+                </MapMarker>
                 <GeoJson
                     geojson-url="fthiotis.geo.json"
                 ></GeoJson>
@@ -82,11 +107,21 @@
     <div 
         :class="{
             'hidden': !expandMenu,
-            'w-1/3': expandMenu
+            'w-2/4 2xl:w-1/3': expandMenu
         }"
     >
         <SideBar></SideBar>
     </div>
+    <MainModal
+        :is-open="isModalOpen"
+    >
+        <template #title>
+            Προσθήκη προειδοποίησης
+        </template>
+        <template #body>
+            <ModalForm @onSubmit="handleFormSubmit"></ModalForm>
+        </template>
+    </MainModal>
   </main>
 </template>
 
@@ -96,6 +131,9 @@ import { useForecastDataStore } from "@/stores/forecastData";
 import { useMarkersData } from "@/composables/useInputData";
 
 import { LIcon } from "@vue-leaflet/vue-leaflet";
+import type { LeafletMouseEvent } from "leaflet";
+import type { WarningModalSchema, ForecastWarningsSchema } from "@/types";
+
 import TheMap from "@/components/TheMap.vue";
 import SideBar from "@/components/sidebar/SideBar.vue";
 import GeoJson from "@/components/GeoJson.vue";
@@ -103,6 +141,8 @@ import MapMarker from "@/components/MapMarker.vue";
 import WindIcon from "@/components/icons/WindIcon.vue";
 import MapInfo from "@/components/Map/MapInfo.vue";
 import MapLegend from "@/components/Map/MapLegend.vue";
+import MainModal from "@/components/modal/MainModal.vue";
+import ModalForm from "@/components/modal/components/ModalForm.vue";
 
 defineOptions({
     name: "HomePage",
@@ -113,8 +153,29 @@ const changeVisibility = () => expandMenu.value = !expandMenu.value;
 const menuIcon = computed<string>(() => {
     return expandMenu.value ? "icons/close.svg" : "icons/menu.svg";
 });
+
 useMarkersData();
+
 const forecastDataStore = useForecastDataStore();
-const { forecastDetails } = forecastDataStore;
+const { forecastDetails, warningLocations } = forecastDataStore;
 const markersData = forecastDetails.data;
+
+const isModalOpen = ref<boolean>(false);
+const warningMarkerLocation = ref<[number,number]>([0,0]);
+
+const openModal = (event: LeafletMouseEvent) => {
+    const { lat, lng } = event.latlng;
+    isModalOpen.value = true;
+    warningMarkerLocation.value = [lat, lng];
+};
+const handleFormSubmit = (form: WarningModalSchema) => {
+    const markerLocation: ForecastWarningsSchema = {
+        location: warningMarkerLocation.value,
+        icon: form.icon,
+        comment: form.comment,
+    };
+    const { setWarningLocations } = forecastDataStore;
+    setWarningLocations(markerLocation);
+    isModalOpen.value = false;
+};
 </script>

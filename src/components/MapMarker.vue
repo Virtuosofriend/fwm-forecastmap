@@ -1,6 +1,7 @@
 <template>
     <l-marker
         :lat-lng="location"
+        :draggable="draggable"
     >
         <slot></slot>
     </l-marker>
@@ -19,6 +20,10 @@ defineProps({
     location: {
         required: true,
         type: Object as PropType<LatLngExpression>,
+    },
+    draggable: {
+        required: false,
+        type: Boolean,
     },
 });
 </script>

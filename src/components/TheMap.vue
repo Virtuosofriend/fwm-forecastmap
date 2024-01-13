@@ -6,6 +6,7 @@
         :center="[38.908674, 22.430257]"
         :useGlobalLeaflet="false"
         @ready="emitMap"
+        @click="$emit('mapClick', $event)"
     >
         <l-tile-layer
             url="https://api.mapbox.com/styles/v1/virtuosofriend/cipcir9ze005lcqniifuijd3u/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmlydHVvc29mcmllbmQiLCJhIjoiY2lwY2lvc3ZjMDAyNnZobm5haDZ1M2VrcSJ9.IGVbY93V5cF7KvEVJnmUTQ"
@@ -28,11 +29,12 @@ defineOptions({
     name: "TheMap",
 });
 
+defineEmits(["mapClick"]);
+
 const zoom = ref<number>(10);
 const forecastDataStore = useForecastDataStore();
 const { setMap } = forecastDataStore;
 const emitMap = (ev: Map) => {
-    console.log(ev);
     setMap(ev);
 };
 </script>

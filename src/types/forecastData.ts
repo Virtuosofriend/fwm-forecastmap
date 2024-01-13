@@ -20,3 +20,12 @@ export type FormDataSchema = {
     dates: ForecastHourSchema
     data: {[label: string]: ForecastDataSchema}
 };
+
+export type WarningModalSchema = {
+    icon: string,
+    comment: string
+};
+
+export interface ForecastWarningsSchema extends WarningModalSchema {
+    location: [number,number],
+}

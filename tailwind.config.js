@@ -13,6 +13,9 @@ export default {
             fontFamily: {
                 "primary": ["Manrope"],
             },
+            zIndex: {
+                "1000": "1000",
+            },
         },
     },
     plugins: [],
