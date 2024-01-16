@@ -84,7 +84,7 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
         },{
             name: "Δυτική Φθιώτιδα",
             value: "West",
-            location: [38.905100, 22.039833],
+            location: [38.97335229502, 22.051932754998965],
             temp: true,
             wind: false,
             snow: true,
@@ -137,7 +137,7 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
         },{
             name: "Περιοχή Μαλιακού",
             value: "Maliakos",
-            location: [38.860116203790405, 22.68706671506156],
+            location: [38.86432332239475, 22.60516214148766],
             wind: true,
             temp: false,
         },{
