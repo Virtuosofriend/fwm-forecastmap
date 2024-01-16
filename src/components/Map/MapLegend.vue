@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="legendMarkers.length > 0" 
-        class="bg-white/80 px-4 py-2 rounded"
+        class="bg-white px-4 py-2 rounded"
     >
         <h3 class="text-lg text-bold text-center mb-4">
             Υπόμνημα
