@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white/50 p-4 rounded">
+    <div class="bg-white/80 p-4 rounded">
         <p>
             Ημερομηνία έκδοσης: {{ forecastDetails.dates.created }}
         </p>
