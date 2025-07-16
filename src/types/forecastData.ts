@@ -1,5 +1,11 @@
+type WeatherConditionObject = {
+    icon: string;
+    label: string;
+    value: string;
+};
+
 export type ForecastDataSchema = {
-    weatherConditions?: string | null
+    weatherConditions?: WeatherConditionObject | null
     tmax?: number | null
     tmin?: number | null
     wmax?: number | null
@@ -29,3 +35,7 @@ export type WarningModalSchema = {
 export interface ForecastWarningsSchema extends WarningModalSchema {
     location: [number,number],
 }
+
+export type ForecastDataPayload = {
+    forecast: FormDataSchema
+};

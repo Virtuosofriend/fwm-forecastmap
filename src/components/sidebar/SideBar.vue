@@ -6,7 +6,7 @@
             </h2>
             <button 
                 class="bg-green-900 text-white rounded p-2 text-sm font-bold"
-                disabled
+                @click="sendWeatherForecastData"
             >
                 Αποθήκευση
             </button>
@@ -84,11 +84,11 @@
                                     v-model="formData[location.value].weatherConditions"
                                 >
                                     <option 
-                                        v-for="condition in weatherConditions"
+                                        v-for="condition in computedWeatherConditions"
                                         :key="condition.icon"
-                                        :value="condition.icon"
+                                        :value="condition"
                                     >
-                                        {{ condition.text }}
+                                        {{ condition.label }}
                                     </option>
                                 </select>
                             </div>
@@ -223,21 +223,42 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, ref, watch } from "vue";
+import { defineOptions, ref, watch, toRaw, computed } from "vue";
+import { storeToRefs } from "pinia";
+
 import { useWeatherOptionsStore } from "@/stores/weather";
 import { useForecastDataStore } from "@/stores/forecastData";
 import CommonInput from "./CommonInput.vue";
 import CustomPicker from "./CustomDatePicker.vue";
-import type { ForecastHourSchema } from "@/types";
+import type { ForecastHourSchema, WeatherIconDropdownOption } from "@/types";
+import { withAsync } from "@/services/httpClient/helpers/withAsync.mjs";
+import { addWeatherForecast } from "@/services/httpClient/directusSourcesApi.mjs";
+import { weatherConditionsDefinitions } from "@/utils/weatherConditionsDefinitions";
 
 defineOptions({
     name: "SideBar",
 });
 
 const weatherStore = useWeatherOptionsStore();
-const { locations, weatherConditions, windDirection } = weatherStore;
+const { locations, weatherConditions, windDirection } = storeToRefs(weatherStore);
 
-let sortedWindDirection = windDirection.sort((a,b) => a.order - b.order);
+const computedWeatherConditions = computed(() => {
+    return weatherConditions.value.reduce((acc, condition) => {
+        const key = condition.weather_icon as keyof typeof weatherConditionsDefinitions;
+        const definition = weatherConditionsDefinitions?.[key];
+        if (definition) {
+            acc.push({
+                icon: condition.asset,
+                label: definition,
+                value: condition.weather_icon,
+            });
+        }
+        return acc;
+    }, [] as WeatherIconDropdownOption[]);
+});
+
+
+const sortedWindDirection = computed(() => [...windDirection.value].sort((a, b) => a.order - b.order));
 
 const forecastDataStore = useForecastDataStore();
 const { forecastDetails: form } = forecastDataStore;
@@ -270,24 +291,41 @@ watch(date_range, (newVal) => {
     }
 });
 
+const sendWeatherForecastData = async () => {
+    try {
+        const payload = {
+            forecast: toRaw(form),
+        };
+        const response = await addWeatherForecast(payload);
+        if (response.status !== 200) {
+            return;
+        }
+    } catch (error) {
+        console.error("Error sending weather forecast data:", error);
+        return;
+    }
+};
+
+/** Following are dummy functions */
+
 const populateDatesData = (property: keyof ForecastHourSchema & string, val: string) => {
     formDates[property] = val;
 };
-// const populateData = () => {
-//     for(let value in formData){
-//         if("tmax" in formData[value]) {
-//             formData[value].tmax = 1;
-//             formData[value].tmin = 1;
-//             formData[value].weatherConditions = "day/sunny";
-//         }
-//         if("wmax" in formData[value]) {
-//             formData[value].wmax = 4;
-//             formData[value].wmin = 1;
-//             formData[value].windDirection = 90;
-//         }
-//     }
+const populateData = () => {
+    for(let value in formData){
+        if("tmax" in formData[value]) {
+            formData[value].tmax = 1;
+            formData[value].tmin = 1;
+            formData[value].weatherConditions = { "icon":"a7e24fed-d8ac-4912-a1a0-d13962fcc628","label":"Ηλιοφάνεια","value":"sunny" };
+        }
+        if("wmax" in formData[value]) {
+            formData[value].wmax = 4;
+            formData[value].wmin = 1;
+            formData[value].windDirection = 90;
+        }
+    }
 
-// };
+};
 </script>
 
 <style scoped>

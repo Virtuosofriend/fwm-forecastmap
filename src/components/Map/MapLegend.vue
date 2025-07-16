@@ -13,7 +13,8 @@
                 :key="index"
             >
                 <img 
-                    :src="`icons/weather_conditions/${legend.icon}.svg`"
+                    :src="`${backendUrl}/assets/${legend.icon}`"
+
                     class="w-10"
                 />
                 <p>{{ legend.text }}</p>
@@ -25,8 +26,10 @@
 <script setup lang="ts">
 import { defineOptions, watch, ref } from "vue";
 import { useForecastDataStore } from "@/stores/forecastData";
+import { storeToRefs } from "pinia";
 import { useWeatherOptionsStore } from "@/stores/weather";
 import type { ForecastDataSchema } from "@/types";
+import { weatherConditionsDefinitions } from "@/utils/weatherConditionsDefinitions";
 
 type LegendMap = {
     text: string;
@@ -36,10 +39,12 @@ type LegendMap = {
 defineOptions({
     name: "MapLegend",
 });
+
+const backendUrl = import.meta.env.VITE_DIRECTUS_API;
 const forecastDataStore = useForecastDataStore();
 const { forecastDetails } = forecastDataStore;
 const weatherOptionsStore = useWeatherOptionsStore();
-const { weatherConditions } = weatherOptionsStore;
+const { weatherConditions } = storeToRefs(weatherOptionsStore);
 
 const markersData = forecastDetails.data;
 const legendMarkers = ref<LegendMap[]>([]);
@@ -51,16 +56,21 @@ const createLegendIcons = ( data: {
     const allData = Object.values(data);
     allData.forEach(marker => {
         if (marker.weatherConditions) {
-            selectedIcons.add(marker.weatherConditions);
+            selectedIcons.add(marker.weatherConditions.icon);
         }
     });
-    
-    const filteredTexts = weatherConditions.reduce((result, condition) => {
-        if ([...selectedIcons].includes(condition.icon)) {
-            result.push(condition);
+
+    const filteredTexts = weatherConditions.value.reduce((result, condition) => {
+
+        if ([...selectedIcons].includes(condition.asset)) {
+            result.push({
+                text: weatherConditionsDefinitions[condition.weather_icon as keyof typeof weatherConditionsDefinitions],
+                icon: condition.asset,
+            });
         }
         return result;
     }, [] as LegendMap[]);
+
     legendMarkers.value = filteredTexts;
 };
 watch(markersData, newVal => {

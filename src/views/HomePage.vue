@@ -37,7 +37,7 @@
                         <div class="flex flex-col items-center justify-center">
                             <div class="mb-2">
                                 <img 
-                                    :src="`icons/weather_conditions/${marker.weatherConditions}.svg`"
+                                    :src="`${backendUrl}/assets/${marker.weatherConditions.icon}`"
                                     class="!w-14"
                                 />
                             </div>
@@ -128,11 +128,15 @@
 <script setup lang="ts">
 import { defineOptions, ref, computed } from "vue";
 import { useForecastDataStore } from "@/stores/forecastData";
+import { useWeatherOptionsStore } from "@/stores/weather";
 import { useMarkersData } from "@/composables/useInputData";
+
+import { withAsync } from "@/services/httpClient/helpers/withAsync.mjs";
+import { getWeatherConditions } from "@/services/httpClient/directusSourcesApi.mjs";
 
 import { LIcon } from "@vue-leaflet/vue-leaflet";
 import type { LeafletMouseEvent } from "leaflet";
-import type { WarningModalSchema, ForecastWarningsSchema } from "@/types";
+import type { WarningModalSchema, ForecastWarningsSchema, WeatherConditions } from "@/types";
 
 import TheMap from "@/components/TheMap.vue";
 import SideBar from "@/components/sidebar/SideBar.vue";
@@ -148,6 +152,20 @@ defineOptions({
     name: "HomePage",
 });
 
+const backendUrl = import.meta.env.VITE_DIRECTUS_API;
+const weatherStore = useWeatherOptionsStore();
+const { setWeatherConditions } = weatherStore;
+
+const getAllWeatherConditions = async():Promise<WeatherConditions[]> => {
+    const { response, error } = await withAsync(getWeatherConditions);
+
+    if ( error || !response ) {
+        return [];
+    }
+    setWeatherConditions(response.data.data);
+    return response.data.data;
+};
+
 const expandMenu = ref<boolean>(false);
 const changeVisibility = () => expandMenu.value = !expandMenu.value;
 const menuIcon = computed<string>(() => {
@@ -155,6 +173,7 @@ const menuIcon = computed<string>(() => {
 });
 
 useMarkersData();
+getAllWeatherConditions();
 
 const forecastDataStore = useForecastDataStore();
 const { forecastDetails, warningLocations } = forecastDataStore;
