@@ -1,0 +1,16 @@
+export const weatherConditionsDefinitions = {
+    "sunny": "Ηλιοφάνεια",
+    "mostly_cloudy": "Διαστήματα ηλιοφάνειας",
+    "mostly_cloudy_w_showers": "Διαστήματα βροχής",
+    "clear": "Ξαστεριά",
+    "mostly_clear": "Διαστήματα ξαστεριάς",
+    "cloudy": "Συννεφιασμένος",
+    "rain": "Βροχή",
+    "t-storms": "Καταιγίδα",
+    "flurries": "Ελαφριά Χιονόπτωση",
+    "snow": "Βαριά Χιονόπτωση",
+    "ice": "Πάγος",
+    "hot": "Kαύσωνας",
+    "fog": "Ομίχλη",
+    "windy": "Ισχυρός Άνεμος",
+};
