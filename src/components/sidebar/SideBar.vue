@@ -219,11 +219,31 @@
                 </div>
             </form>
         </section>
+        <MainModal
+        :is-open="isModalOpen"
+    >
+        <template #title>
+            Αποθήκευση πρόγνωσης καιρού
+        </template>
+        <template #body>
+            <div class="flex flex-col gap-4 items-center justify-center my-2">
+                <p>
+                    {{ modalWarningMessage }}
+                </p>
+                <button 
+                    class="bg-slate-600 text-white rounded p-2 text-sm font-bold"
+                    @click="isModalOpen = false"
+                >
+                    Κλείσιμο
+                </button>
+            </div>
+        </template>
+    </MainModal>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineOptions, ref, watch, toRaw, computed } from "vue";
+import { defineOptions, ref, watch, toRaw, computed, defineAsyncComponent } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useWeatherOptionsStore } from "@/stores/weather";
@@ -291,21 +311,28 @@ watch(date_range, (newVal) => {
     }
 });
 
+const MainModal = defineAsyncComponent(() => import("@/components/modal/MainModal.vue"));
+const isModalOpen = ref<boolean>(false);
+const modalWarningMessage = ref<string>("Η προγνώση καιρού αποθηκεύεται...");
+
 const sendWeatherForecastData = async () => {
     try {
         const payload = {
             forecast: toRaw(form),
         };
+        isModalOpen.value = true;
         const response = await addWeatherForecast(payload);
         if (response.status !== 200) {
-            return;
+            return modalWarningMessage.value = "Σφάλμα κατά την αποθήκευση της πρόγνωσης καιρού.";
         }
+        modalWarningMessage.value = "Η πρόγνωση καιρού αποθηκεύτηκε επιτυχώς!";
+
     } catch (error) {
         console.error("Error sending weather forecast data:", error);
+        isModalOpen.value = false;
         return;
     }
 };
-
 /** Following are dummy functions */
 
 const populateDatesData = (property: keyof ForecastHourSchema & string, val: string) => {
