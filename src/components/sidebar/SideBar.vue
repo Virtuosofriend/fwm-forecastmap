@@ -6,7 +6,7 @@
             </h2>
             <button 
                 class="bg-green-900 text-white rounded p-2 text-sm font-bold"
-                @click.once="sendWeatherForecastData"
+                @click="sendWeatherForecastData"
             >
                 Αποθήκευση
             </button>
@@ -326,8 +326,10 @@ const sendWeatherForecastData = async () => {
             return modalWarningMessage.value = "Σφάλμα κατά την αποθήκευση της πρόγνωσης καιρού.";
         }
         modalWarningMessage.value = "Η πρόγνωση καιρού αποθηκεύτηκε επιτυχώς!";
+
     } catch (error) {
         console.error("Error sending weather forecast data:", error);
+        isModalOpen.value = false;
         return;
     }
 };
