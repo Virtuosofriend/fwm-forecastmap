@@ -1,6 +1,8 @@
 <template>
     <header class="h-16 bg-gray-800 text-white flex items-center justify-between gap-2">
-        <h2 class="text-xl font-bold text-white px-4">Fthiotida Meteogroup - Προγνώσεις</h2>
+        <h2 class="md:text-xl text-md font-bold text-white px-4">
+            Fthiotida Meteogroup - Προγνώσεις
+        </h2>
         <div class="flex items-center gap-2 px-4">
             <MenuButton />
             <ExportMapButton />
