@@ -1,0 +1,182 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.434891, 38.903708] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Λαμία",
+                "value": "Lamia",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.692526, 39.016905] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Όρθρυς",
+                "value": "Orthris",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.856371, 38.937402] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Ανατολική Φθιώτιδα",
+                "value": "East",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.304424, 39.110429] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Βόρεια Φθιώτιδα",
+                "value": "North",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.051932754998965, 38.97335229502] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Δυτική Φθιώτιδα",
+                "value": "West",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.775458, 38.759799] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Καμένα Βούρλα",
+                "value": "Kamena",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.311391, 38.783776] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Οίτη",
+                "value": "Oiti",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.670016, 38.657546] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Αμφίκλεια",
+                "value": "Amfikleia",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [23.034462, 38.650973] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Λοκρίδα",
+                "value": "Lokrida",
+                "wind": false,
+                "temp": true,
+                "snow": true
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.97906390072416, 38.92460309724623] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Διαύλος Ωρέων",
+                "value": "Oreoi",
+                "wind": true,
+                "temp": false
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [22.462680353076728, 39.085151037874574]
+            },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Περιοχή Δομοκού",
+                "value": "Domokos",
+                "wind": true,
+                "temp": false
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.2362134937132, 38.928194940769835] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Περιοχή Μακρακώμης",
+                "value": "Makrakomi",
+                "wind": true,
+                "temp": false
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.60516214148766, 38.86432332239475] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Περιοχή Μαλιακού",
+                "value": "Maliakos",
+                "wind": true,
+                "temp": false
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [22.829551265109494, 38.6128697548764] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Περιοχή Παρνασού",
+                "value": "Parnasos",
+                "wind": true,
+                "temp": false
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [23.160233676129977, 38.70574931835848] },
+            "properties": {
+                "symbol": "sunny",
+                "name": "Περιοχή Ευβοϊκού",
+                "value": "Evvoikos",
+                "wind": true,
+                "temp": false
+            }
+        }
+    ]
+}

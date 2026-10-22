@@ -1,5 +1,4 @@
-
-import { api } from "./api.mjs";
+import { api, publicApi } from "./api.mjs";
 import type { ForecastDataPayload } from "@/types/forecastData";
 
 const URLS = {
@@ -8,9 +7,9 @@ const URLS = {
 };
 
 export const addWeatherForecast = (data: ForecastDataPayload) => {
-    return api.post(`items/${ URLS.FORECASTS }`, data);
+    return api.post(`items/${URLS.FORECASTS}`, data);
 };
 
 export const getWeatherConditions = () => {
-    return api.get(`items/${ URLS.WEATHER_CONDITIONS }`);
+    return publicApi.get(`items/${URLS.WEATHER_CONDITIONS}`);
 };

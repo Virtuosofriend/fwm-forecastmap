@@ -1,16 +1,13 @@
 <template>
-    <div class="bg-white p-4 rounded">
-        <p>
-            Ημερομηνία έκδοσης: {{ forecastDetails.dates.created }}
-        </p>
-        <p>
-            Ισχύς: 
-            <span class="font-bold">
-                {{ forecastDetails.dates.forecast_date }}
-            </span> από 
+    <div class="bg-white p-2 rounded">
+        <p>Ημερομηνία έκδοσης: {{ forecastDetails.dates.created }}</p>
+        <p class="flex gap-1">
+            Ισχύει για
+            <span class="font-bold"> {{ forecastDetails.dates.forecast_date }}</span>
             <span class="font-bold">
                 {{ forecastDetails.dates.forecast_start_hour }}
-            </span> έως 
+            </span>
+            -
             <span class="font-bold">
                 {{ forecastDetails.dates.forecast_end_hour }}
             </span>
@@ -19,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions } from "vue";
 import { useForecastDataStore } from "@/stores/forecastData";
 
 defineOptions({
@@ -28,5 +24,4 @@ defineOptions({
 
 const forecastDataStore = useForecastDataStore();
 const { forecastDetails } = forecastDataStore;
-
 </script>

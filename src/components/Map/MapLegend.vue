@@ -1,22 +1,13 @@
 <template>
-    <div
-        v-if="legendMarkers.length > 0" 
-        class="bg-white px-4 py-2 rounded"
-    >
-        <h3 class="text-lg text-bold text-center mb-4">
-            Υπόμνημα
-        </h3>
-        <div class="flex justify-center items-center gap-2 max-w-[300px] flex-wrap">
-            <div 
+    <div class="bg-white p-1 rounded">
+        <h3 class="text-md font-bold text-center mb-2">Υπόμνημα</h3>
+        <div class="flex justify-center items-center gap-1 max-w-75 flex-wrap">
+            <div
                 class="flex items-center flex-col"
                 v-for="(legend, index) in legendMarkers"
                 :key="index"
             >
-                <img 
-                    :src="`${backendUrl}/assets/${legend.icon}`"
-
-                    class="w-10"
-                />
+                <img :src="`${backendUrl}/assets/${legend.icon}`" class="w-8" />
                 <p>{{ legend.text }}</p>
             </div>
         </div>
@@ -24,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, watch, ref } from "vue";
+import { watch, ref } from "vue";
 import { useForecastDataStore } from "@/stores/forecastData";
 import { storeToRefs } from "pinia";
 import { useWeatherOptionsStore } from "@/stores/weather";
+import { weatherConditionsDefinitions } from "@/types";
 import type { ForecastDataSchema } from "@/types";
-import { weatherConditionsDefinitions } from "@/utils/weatherConditionsDefinitions";
 
 type LegendMap = {
     text: string;
@@ -43,28 +34,25 @@ defineOptions({
 const backendUrl = import.meta.env.VITE_DIRECTUS_API;
 const forecastDataStore = useForecastDataStore();
 const { forecastDetails } = forecastDataStore;
-const weatherOptionsStore = useWeatherOptionsStore();
-const { weatherConditions } = storeToRefs(weatherOptionsStore);
+const { weatherConditions } = storeToRefs(useWeatherOptionsStore());
 
-const markersData = forecastDetails.data;
 const legendMarkers = ref<LegendMap[]>([]);
 
-const createLegendIcons = ( data: {
-        [label: string]: ForecastDataSchema;
-    }) => {
+const createLegendIcons = (data: { [label: string]: ForecastDataSchema }) => {
     const selectedIcons: Set<string> = new Set();
     const allData = Object.values(data);
-    allData.forEach(marker => {
+    allData.forEach((marker) => {
         if (marker.weatherConditions) {
             selectedIcons.add(marker.weatherConditions.icon);
         }
     });
 
     const filteredTexts = weatherConditions.value.reduce((result, condition) => {
-
         if ([...selectedIcons].includes(condition.asset)) {
             result.push({
-                text: weatherConditionsDefinitions[condition.weather_icon as keyof typeof weatherConditionsDefinitions],
+                text: weatherConditionsDefinitions[
+                    condition.weather_icon as keyof typeof weatherConditionsDefinitions
+                ],
                 icon: condition.asset,
             });
         }
@@ -73,9 +61,13 @@ const createLegendIcons = ( data: {
 
     legendMarkers.value = filteredTexts;
 };
-watch(markersData, newVal => {
-    createLegendIcons(newVal);
-},{
-    immediate: true,
-});
+watch(
+    forecastDetails,
+    (newVal) => {
+        createLegendIcons(newVal.data);
+    },
+    {
+        deep: true,
+    },
+);
 </script>
