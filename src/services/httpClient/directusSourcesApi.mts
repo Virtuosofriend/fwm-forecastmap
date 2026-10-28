@@ -13,3 +13,7 @@ export const addWeatherForecast = (data: ForecastDataPayload) => {
 export const getWeatherConditions = () => {
     return publicApi.get(`items/${URLS.WEATHER_CONDITIONS}`);
 };
+
+export const getWeatherForecasts = () => {
+    return publicApi.get(`items/${URLS.FORECASTS}`);
+};

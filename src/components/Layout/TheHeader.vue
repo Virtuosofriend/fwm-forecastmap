@@ -5,6 +5,7 @@
         </h2>
         <div class="flex items-center gap-2 px-4">
             <MenuButton />
+            <PastForecastsButton />
             <ExportMapButton />
         </div>
     </header>
@@ -13,4 +14,5 @@
 <script setup lang="ts">
 import ExportMapButton from "@/components/Buttons/ExportMap.vue";
 import MenuButton from "@/components/Buttons/MenuButton.vue";
+import PastForecastsButton from "@/components/Buttons/PastForecastsButton.vue";
 </script>
