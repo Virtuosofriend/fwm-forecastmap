@@ -13,7 +13,7 @@ export type ForecastDataSchema = {
     wmax?: number | null;
     wmin?: number | null;
     windDirection?: number | null;
-    snow?: number | null;
+    snow?: number;
     location: [number, number];
     locationType: TypeOfMarkers.temp | TypeOfMarkers.wind;
 };

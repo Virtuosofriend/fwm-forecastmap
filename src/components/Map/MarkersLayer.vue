@@ -12,6 +12,12 @@
                 <p class="text-gray-800 text-sm font-extrabold">
                     {{ marker.tmin || marker.wmin }}<span class="font-medium">...</span
                     >{{ marker.tmax || marker.wmax }}{{ units[marker.locationType] }}
+                    <span
+                        class="flex items-center justify-center text-red-700 text-sm font-medium"
+                        v-show="marker.snow && marker.snow > 0"
+                    >
+                        <img src="/icons/snow.svg" class="size-4 mr-1" />{{ marker.snow }}m
+                    </span>
                 </p>
             </div>
         </template>
