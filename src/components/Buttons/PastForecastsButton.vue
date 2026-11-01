@@ -1,31 +1,23 @@
 <template>
     <button
-        class="px-2 py-1 bg-white text-gray-800 font-medium cursor-pointer"
+        class="px-2 py-1 bg-white text-gray-800 rounded font-medium cursor-pointer"
         @click="openCalendar"
     >
-        Ιστορικό
+        Ιστορικό προγνώσεων
     </button>
-    <BottomSheet v-show="isOpen" scrollable ref="history">
-        <p class="text-white">BOTTTOM</p>
+    <BottomSheet v-model:open="isOpen" scrollable label="Ιστορικό προγνώσεων">
+        <HistoricalForecastsSection />
     </BottomSheet>
 </template>
 
 <script setup lang="ts">
-import { useBottomSheet } from "@/stores/bottomSheet";
 import BottomSheet from "@/components/Layout/BottomSheet.vue";
-import { getAllWeatherForecasts } from "@/services/fetchWeatherForecasts";
-import { useForecastDataStore } from "@/stores/forecastData";
+import HistoricalForecastsSection from "@/components/HistoricalForecasts/HistoricalForecastsSection.vue";
 import { ref } from "vue";
 
-const history = ref(null);
-
-const { setPastForecasts } = useForecastDataStore();
-const { toggle, isOpen } = useBottomSheet();
+const isOpen = ref<boolean>(false);
 
 const openCalendar = async () => {
-    const forecasts = await getAllWeatherForecasts();
-    setPastForecasts(forecasts);
-    console.log(history.value);
-    toggle(history.value);
+    isOpen.value = true;
 };
 </script>

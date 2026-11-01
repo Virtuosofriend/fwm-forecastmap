@@ -1,8 +1,7 @@
 <template>
     <header class="h-16 bg-gray-800 text-white flex items-center justify-between gap-2">
-        <h2 class="md:text-xl text-md font-bold text-white px-4">
-            Fthiotida Meteogroup - Προγνώσεις
-        </h2>
+        <img src="/logo-dark.png" class="hidden object-cover h-18 md:inline-block" />
+        <img src="/logo_standalone.svg" class="object-cover h-16 md:hidden" />
         <div class="flex items-center gap-2 px-4">
             <MenuButton />
             <PastForecastsButton />

@@ -1,13 +1,20 @@
 import { withAsync } from "./httpClient/helpers/withAsync.mts";
 import { getWeatherForecasts } from "./httpClient/directusSourcesApi.mts";
-import type { FormDataSchema } from "@/types";
+import type { PastForecastResponse } from "@/types";
 
-export const getAllWeatherForecasts = async (): Promise<FormDataSchema[]> => {
-    const { response, error } = await withAsync(getWeatherForecasts);
+type GetAllWeatherForecastsParams = {
+    startDate: string;
+    endDate: string;
+};
+export const getAllWeatherForecasts = async ({
+    startDate,
+    endDate,
+}: GetAllWeatherForecastsParams): Promise<PastForecastResponse[] | []> => {
+    const { response, error } = await withAsync(getWeatherForecasts, { startDate, endDate });
 
     if (error || !response) {
         return [];
     }
-    const conditions = (response as { data: { data: FormDataSchema[] } }).data.data;
+    const conditions = (response as { data: { data: PastForecastResponse[] } }).data.data;
     return conditions;
 };

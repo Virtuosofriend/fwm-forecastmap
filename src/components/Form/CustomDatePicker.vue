@@ -7,9 +7,19 @@
             cancelBtnLabel: 'Άκυρο',
             selectBtnLabel: 'Επιλογή',
         }"
-        :is-24="true"
         :range="isRangeEnable"
+        :min-date="new Date()"
         :time-picker="isTimeOnly"
+        :auto-apply="!isTimeOnly"
+        :formats="formats"
+        :time-config="{
+            enableTimePicker: isTimeOnly,
+            ignoreTimeValidation: true,
+            startTime: [
+                { hours: 0, minutes: 0 },
+                { hours: 23, minutes: 0 },
+            ],
+        }"
     ></VueDatePicker>
 </template>
 
@@ -17,12 +27,13 @@
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { el } from "date-fns/locale";
+import { computed } from "vue";
 
 defineOptions({
     name: "CustomDatePicker",
 });
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         formatDate: string;
         isRangeEnable: boolean;
@@ -36,13 +47,7 @@ withDefaults(
 );
 
 const inputDate = defineModel<string | string[] | null>();
+const formats = computed(() => {
+    return props.isTimeOnly ? { input: "HH:mm" } : { input: "dd/MM/yyyy" };
+});
 </script>
-
-<style>
-.dp__menu {
-    font-family: "Manrope";
-}
-.dp__input {
-    font-family: "Manrope";
-}
-</style>

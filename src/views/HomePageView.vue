@@ -24,8 +24,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useWeatherOptionsStore } from "@/stores/weather";
-import { withAsync } from "@/services/httpClient/helpers/withAsync.mjs";
-import { getWeatherConditions } from "@/services/httpClient/directusSourcesApi.mjs";
+import { withAsync } from "@/services/httpClient/helpers/withAsync.mts";
+import { getWeatherConditions } from "@/services/httpClient/directusSourcesApi.mts";
 import type { WeatherConditions, WarningModalSchema } from "@/types";
 import type { MapMouseEvent } from "maplibre-gl";
 

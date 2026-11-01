@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { toRaw, defineAsyncComponent, ref } from "vue";
-import { withAsync } from "@/services/httpClient/helpers/withAsync.mjs";
-import { addWeatherForecast } from "@/services/httpClient/directusSourcesApi.mjs";
+import { withAsync } from "@/services/httpClient/helpers/withAsync.mts";
+import { addWeatherForecast } from "@/services/httpClient/directusSourcesApi.mts";
 import type { FormDataSchema } from "@/types";
 import { useForecastDataStore } from "@/stores/forecastData.ts";
 

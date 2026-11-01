@@ -44,3 +44,11 @@ export interface ForecastWarningsSchema extends WarningModalSchema {
 export type ForecastDataPayload = {
     forecast: FormDataSchema;
 };
+
+export type PastForecastResponse = {
+    id: number;
+    sort: null | number;
+    date_created: Date;
+    date_updated: Date | null;
+    forecast: FormDataSchema;
+};

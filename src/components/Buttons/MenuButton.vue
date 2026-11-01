@@ -1,19 +1,19 @@
 <template>
     <button
         class="px-2 py-1 bg-white text-gray-800 font-medium rounded cursor-pointer"
-        @click="toggle"
+        @click="isOpen = true"
     >
-        Νέα πρόγνωση
+        <span> Νέα πρόγνωση </span>
     </button>
-    <BottomSheet v-show="isOpen" scrollable ref="menu">
+    <BottomSheet v-model:open="isOpen" scrollable label="Νέα πρόγνωση">
         <ForecastForm />
     </BottomSheet>
 </template>
 
 <script setup lang="ts">
-import { useBottomSheet } from "@/stores/bottomSheet";
+import { ref } from "vue";
 import BottomSheet from "@/components/Layout/BottomSheet.vue";
 import ForecastForm from "@/components/Form/ForecastForm.vue";
 
-const { toggle, isOpen } = useBottomSheet();
+const isOpen = ref<boolean>(false);
 </script>

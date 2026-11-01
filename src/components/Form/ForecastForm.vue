@@ -166,13 +166,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { reactive, watch, onBeforeUnmount } from "vue";
 import CustomPicker from "./CustomDatePicker.vue";
 import CommonInput from "./CommonInput.vue";
 import SaveForecastButton from "@/components/Buttons/SaveForecastButton.vue";
 
 import { useWeatherDataProvider } from "@/composables/useWeatherDataProvider";
 import { createEmptyForecastDetails } from "@/stores/helpers/forecastDataHelpers";
+import { useForecastDataStore } from "@/stores/forecastData";
 import type { ForecastDataSchema, FormDataSchema, WeatherLocations } from "@/types";
 import { TypeOfMarkers } from "@/types";
 
@@ -215,6 +216,9 @@ const windFields = [
     },
 ] as const;
 
+const forecastStore = useForecastDataStore();
+const { forecastDetails, resetForecastDetails } = forecastStore;
+
 const formData = reactive<FormDataSchema>(createEmptyForecastDetails());
 const getLocationData = (locationValue: string): ForecastDataSchema => {
     const locationData = formData.data[locationValue];
@@ -223,38 +227,45 @@ const getLocationData = (locationValue: string): ForecastDataSchema => {
     }
     return locationData;
 };
+if (forecastDetails.dates.forecast_date === null) {
+    const populateFormData = (locations: WeatherLocations[]) => {
+        locations.forEach((element) => {
+            const locationData: ForecastDataSchema = {
+                location: element.location,
+                locationType: TypeOfMarkers.temp,
+            };
 
-const populateFormData = (locations: WeatherLocations[]) => {
-    locations.forEach((element) => {
-        const locationData: ForecastDataSchema = {
-            location: element.location,
-            locationType: TypeOfMarkers.temp,
-        };
+            if (element.temp) {
+                locationData.tmax = null;
+                locationData.tmin = null;
+                locationData.weatherConditions = null;
+            }
+            if (element.wind) {
+                locationData.wmax = null;
+                locationData.wmin = null;
+                locationData.windDirection = null;
+                locationData.locationType = TypeOfMarkers.wind;
+            }
+            if (element.snow) {
+                locationData.snow = 0;
+            }
 
-        if (element.temp) {
-            locationData.tmax = null;
-            locationData.tmin = null;
-            locationData.weatherConditions = null;
-        }
-        if (element.wind) {
-            locationData.wmax = null;
-            locationData.wmin = null;
-            locationData.windDirection = null;
-            locationData.locationType = TypeOfMarkers.wind;
-        }
-        if (element.snow) {
-            locationData.snow = 0;
-        }
-
-        formData.data[element.value] = locationData;
-    });
-};
-populateFormData(locations.value);
+            formData.data[element.value] = locationData;
+        });
+    };
+    populateFormData(locations.value);
+} else {
+    Object.assign(formData, forecastDetails);
+}
 
 watch(formData.dates, (newVal) => {
     if (newVal.forecast_range.length > 0) {
         formData.dates.forecast_start_hour = newVal.forecast_range[0] || "00:00";
         formData.dates.forecast_end_hour = newVal.forecast_range[1] || "00:00";
     }
+});
+
+onBeforeUnmount(() => {
+    resetForecastDetails();
 });
 </script>

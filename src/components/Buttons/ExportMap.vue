@@ -1,7 +1,7 @@
 <template>
     <div v-if="isMapLoaded">
         <button
-            class="px-2 py-1 bg-white text-gray-800 font-medium cursor-pointer"
+            class="px-2 py-1 bg-white text-gray-800 rounded font-medium cursor-pointer"
             @click="handleUserClick"
         >
             Εξαγωγή χάρτη

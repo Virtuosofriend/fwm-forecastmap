@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import { computed, reactive, shallowRef } from "vue";
-import type { FormDataSchema, ForecastWarningsSchema } from "@/types";
+import type { FormDataSchema, ForecastWarningsSchema, PastForecastResponse } from "@/types";
 import { createEmptyForecastDetails } from "./helpers/forecastDataHelpers";
 
 export const useForecastDataStore = defineStore("forecastData", () => {
     const forecastDetailsInitial = shallowRef(createEmptyForecastDetails());
-    const warningLocationsInitial: ForecastWarningsSchema[] = reactive([]);
-    let pastForecastsInitial: FormDataSchema[] = reactive([]);
+    const warningLocationsInitial = reactive<ForecastWarningsSchema[]>([]);
+    const pastForecastsInitial = shallowRef<PastForecastResponse[]>([]);
 
-    const forecastDetails = computed(() => forecastDetailsInitial);
+    const forecastDetails = computed(() => forecastDetailsInitial.value);
     const warningLocations = computed(() => warningLocationsInitial);
-    const pastForecasts = computed(() => pastForecastsInitial);
+    const pastForecasts = computed(() => pastForecastsInitial.value);
 
     function setForecastDetails(data: FormDataSchema) {
         forecastDetailsInitial.value = data;
@@ -18,9 +18,12 @@ export const useForecastDataStore = defineStore("forecastData", () => {
     function setWarningLocations(location: ForecastWarningsSchema) {
         warningLocationsInitial.push(location);
     }
-    function setPastForecasts(data: FormDataSchema[]) {
-        console.log(data);
-        pastForecastsInitial = data;
+    function setPastForecasts(data: PastForecastResponse[]) {
+        pastForecastsInitial.value = data;
+    }
+
+    function resetForecastDetails() {
+        forecastDetailsInitial.value = createEmptyForecastDetails();
     }
 
     return {
@@ -30,5 +33,6 @@ export const useForecastDataStore = defineStore("forecastData", () => {
         setWarningLocations,
         pastForecasts,
         setPastForecasts,
+        resetForecastDetails,
     };
 });
