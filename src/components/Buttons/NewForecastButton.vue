@@ -1,7 +1,7 @@
 <template>
     <button
         class="px-2 py-1 bg-white text-gray-800 font-medium rounded cursor-pointer"
-        @click="isOpen = true"
+        @click="handleOpen"
     >
         <span> Νέα πρόγνωση </span>
     </button>
@@ -14,6 +14,13 @@
 import { ref } from "vue";
 import BottomSheet from "@/components/Layout/BottomSheet.vue";
 import ForecastForm from "@/components/Form/ForecastForm.vue";
+import { useForecastDataStore } from "@/stores/forecastData";
 
 const isOpen = ref<boolean>(false);
+const { resetForecastDetails } = useForecastDataStore();
+
+const handleOpen = () => {
+    resetForecastDetails();
+    isOpen.value = true;
+};
 </script>

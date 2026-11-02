@@ -17,11 +17,11 @@
 
 <script setup lang="ts">
 import { useForecastDataStore } from "@/stores/forecastData";
-
+import { storeToRefs } from "pinia";
 defineOptions({
     name: "MapInfo",
 });
 
-const forecastDataStore = useForecastDataStore();
+const forecastDataStore = storeToRefs(useForecastDataStore());
 const { forecastDetails } = forecastDataStore;
 </script>

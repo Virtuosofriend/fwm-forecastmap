@@ -166,7 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, onBeforeUnmount } from "vue";
+import { reactive, watch } from "vue";
 import CustomPicker from "./CustomDatePicker.vue";
 import CommonInput from "./CommonInput.vue";
 import SaveForecastButton from "@/components/Buttons/SaveForecastButton.vue";
@@ -217,7 +217,7 @@ const windFields = [
 ] as const;
 
 const forecastStore = useForecastDataStore();
-const { forecastDetails, resetForecastDetails } = forecastStore;
+const { forecastDetails } = forecastStore;
 
 const formData = reactive<FormDataSchema>(createEmptyForecastDetails());
 const getLocationData = (locationValue: string): ForecastDataSchema => {
@@ -263,9 +263,5 @@ watch(formData.dates, (newVal) => {
         formData.dates.forecast_start_hour = newVal.forecast_range[0] || "00:00";
         formData.dates.forecast_end_hour = newVal.forecast_range[1] || "00:00";
     }
-});
-
-onBeforeUnmount(() => {
-    resetForecastDetails();
 });
 </script>

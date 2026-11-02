@@ -43,8 +43,10 @@
 <script setup lang="ts">
 import { useForecastDataStore } from "@/stores/forecastData";
 import TheMarker from "@/components/Map/TheMarker.vue";
+import { storeToRefs } from "pinia";
 
-const { forecastDetails, warningLocations } = useForecastDataStore();
+const { forecastDetails, warningLocations } = storeToRefs(useForecastDataStore());
+
 const units: Record<string, string> = {
     temp: "˚C",
     wind: "Bft",
