@@ -32,8 +32,7 @@ defineOptions({
 });
 
 const backendUrl = import.meta.env.VITE_DIRECTUS_API;
-const forecastDataStore = useForecastDataStore();
-const { forecastDetails } = forecastDataStore;
+const { forecastDetails } = storeToRefs(useForecastDataStore());
 const { weatherConditions } = storeToRefs(useWeatherOptionsStore());
 
 const legendMarkers = ref<LegendMap[]>([]);
