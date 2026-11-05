@@ -15,6 +15,9 @@
         <MglCustomControl position="top-left">
             <slot name="legend"></slot>
         </MglCustomControl>
+        <MglCustomControl position="bottom-left" class="bg-transparent">
+            <img src="/logo-stacked-dark.png" alt="logo" class="w-22 opacity-50" />
+        </MglCustomControl>
         <slot name="content"></slot>
     </mgl-map>
 </template>
