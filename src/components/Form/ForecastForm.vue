@@ -255,7 +255,7 @@ if (forecastDetails.dates.forecast_date === null) {
     };
     populateFormData(locations.value);
 } else {
-    Object.assign(formData, forecastDetails);
+    Object.assign(formData, structuredClone(forecastDetails));
 }
 
 watch(formData.dates, (newVal) => {

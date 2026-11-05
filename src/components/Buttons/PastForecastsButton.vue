@@ -5,7 +5,12 @@
     >
         Ιστορικό προγνώσεων
     </button>
-    <BottomSheet v-model:open="isOpen" scrollable label="Ιστορικό προγνώσεων">
+    <BottomSheet
+        v-model:open="isOpen"
+        scrollable
+        label="Ιστορικό προγνώσεων"
+        :closeOnClickOutside="false"
+    >
         <HistoricalForecastsSection />
     </BottomSheet>
 </template>
