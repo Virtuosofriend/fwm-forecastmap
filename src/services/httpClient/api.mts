@@ -7,10 +7,10 @@ const HEADERS: Record<string, string> = {
     Accept: "application/json",
 };
 
-if (configuration.directusToken != null) {
-    HEADERS["Authorization"] = `Bearer ${configuration.directusToken}`;
-    const AUTH_TOKEN: string | undefined = import.meta.env.VITE_DIRECTUS_TOKEN;
-}
+let onUnauthorized: (() => void) | null = null;
+export const setUnauthorizedHandler = (handler: () => void) => {
+    onUnauthorized = handler;
+};
 
 const errorInterceptor = (error: AxiosError): Promise<AxiosError> => {
     console.log("error", error.config);
@@ -24,6 +24,7 @@ const errorInterceptor = (error: AxiosError): Promise<AxiosError> => {
     switch (error.response.status) {
         case 401:
             console.error(error.message);
+            onUnauthorized?.();
             break;
         default:
             // Handle other status codes if needed
@@ -69,7 +70,7 @@ const createApiClient = (
 };
 
 const directusClient = createApiClient(
-    { baseURL: configuration.baseURL, headers: HEADERS },
+    { baseURL: configuration.baseURL, headers: HEADERS, withCredentials: true },
     { useInterceptors: true },
 );
 

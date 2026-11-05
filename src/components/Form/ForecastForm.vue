@@ -4,7 +4,7 @@
             <h2 class="text-xl font-bold text-center">Εισαγωγή συνθηκών</h2>
             <SaveForecastButton :data="formData" />
         </div>
-        <section class="mt-4">
+        <section class="mt-2">
             <form class="flex flex-col gap-4">
                 <div class="flex gap-2 border-b border-gray-600 pb-4">
                     <div>

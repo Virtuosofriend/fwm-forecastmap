@@ -14,7 +14,7 @@
                     @user-selected-forecast="handleUserSelectedForecast"
                 />
             </div>
-            <div class="flex flex-col gap-2 focus:outline-none pt-2" v-else>
+            <div class="flex flex-col focus:outline-none pt-2" v-else>
                 <div class="flex items-center gap-2 mb-2 border-b border-gray-600 pb-2">
                     <h3 class="font-bold text-xl text-white w-full">
                         Προβολή πρόγνωσης {{ date }}
