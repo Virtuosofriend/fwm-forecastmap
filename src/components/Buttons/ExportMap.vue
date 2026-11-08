@@ -25,7 +25,7 @@ const handleUserClick = async () => {
         hideAllControls: false,
         coverEdits: false,
         format: "png",
-        hideControlsInCorner: ["top-right", "bottom-left", "bottom-right"],
+        hideControlsInCorner: ["top-right", "bottom-right"],
     };
     try {
         const currentMap = map.map;

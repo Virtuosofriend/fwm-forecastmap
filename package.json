@@ -1,6 +1,6 @@
 {
     "name": "fwm-forecastmap",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "private": true,
     "type": "module",
     "scripts": {
@@ -15,6 +15,7 @@
         "format": "prettier --write --experimental-cli src/"
     },
     "dependencies": {
+        "@directus/sdk": "27.0.0",
         "@headlessui/vue": "1.7.17",
         "@indoorequal/vue-maplibre-gl": "9.0.1",
         "@tailwindcss/vite": "4.3.3",

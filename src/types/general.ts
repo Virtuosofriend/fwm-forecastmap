@@ -58,3 +58,7 @@ export enum TypeOfMarkers {
     wind = "wind",
     warning = "warning",
 }
+
+export const PRECIP_CONDITIONS: ReadonlySet<string> = new Set<
+    keyof typeof weatherConditionsDefinitions
+>(["mostly_cloudy_w_showers", "showers", "t-storms", "rain", "flurries", "snow"]);

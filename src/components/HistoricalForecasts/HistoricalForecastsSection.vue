@@ -1,13 +1,34 @@
 <template>
-    <section class="flex flex-col gap-2">
-        <ForecastsCalendar
-            v-model="date"
-            @update-month-year="onUpdateMonthYear"
-            @user-selected-forecast="handleUserSelectedForecast"
-        />
-        <BottomSheet v-model:open="isOpen" scrollable :label="`Πρόγνωση για ${date}`">
-            <ForecastForm />
-        </BottomSheet>
+    <section class="overflow-x-hidden">
+        <Transition
+            name="slide-scale"
+            mode="out-in"
+            @after-enter="onAfterEnter"
+            @enter="resetScroll"
+        >
+            <div class="flex flex-col gap-2 focus:outline-none" v-if="activeView === 'calendar'">
+                <h3 class="font-bold text-xl text-white">Επιλογή ημερομηνίας</h3>
+                <ForecastsCalendar
+                    v-model="date"
+                    @update-month-year="onUpdateMonthYear"
+                    @user-selected-forecast="handleUserSelectedForecast"
+                />
+            </div>
+            <div class="flex flex-col focus:outline-none pt-2" v-else>
+                <div class="flex items-center gap-2 mb-2 border-b border-gray-600 pb-2">
+                    <h3 class="font-bold text-xl text-white w-full">
+                        Προβολή πρόγνωσης {{ date }}
+                    </h3>
+                    <button
+                        class="px-2 py-1 bg-gray-600 hover:bg-gray-900 text-white text-sm rounded cursor-pointer"
+                        @click="handleBackToCalendar"
+                    >
+                        Επιστροφή στο ημερολόγιο
+                    </button>
+                </div>
+                <ForecastForm />
+            </div>
+        </Transition>
     </section>
 </template>
 
@@ -19,15 +40,14 @@ import { watch, ref } from "vue";
 import { useForecastDataStore } from "@/stores/forecastData";
 
 import ForecastsCalendar from "@/components/Calendar/ForecastsCalendar.vue";
-import BottomSheet from "@/components/Layout/BottomSheet.vue";
+
 import ForecastForm from "@/components/Form/ForecastForm.vue";
 import type { FormDataSchema } from "@/types";
 
-const isOpen = ref<boolean>(false);
-
 const { setPastForecasts, setForecastDetails } = useForecastDataStore();
-
+const activeView = ref<"calendar" | "forecast">("calendar");
 const date = ref<string>(format(new Date(), "dd/MM/yyyy"));
+const direction = ref<"1" | "-1">("1");
 
 const fetchForecasts = () => {
     let currentMonth = -1;
@@ -43,9 +63,8 @@ const fetchForecasts = () => {
                 startDate,
                 endDate,
             });
-            if (forecasts.length > 0) {
-                setPastForecasts(forecasts);
-            }
+
+            setPastForecasts(forecasts);
             currentMonth = activeMonth;
             currentYear = activeYear;
         }
@@ -80,6 +99,41 @@ const onUpdateMonthYear = (month: number, year: number) => {
 
 const handleUserSelectedForecast = (forecast: FormDataSchema) => {
     setForecastDetails(forecast);
-    isOpen.value = true;
+    direction.value = "1";
+    activeView.value = "forecast";
+};
+
+const handleBackToCalendar = () => {
+    direction.value = "-1";
+    activeView.value = "calendar";
+};
+
+const onAfterEnter = (el: Element) => {
+    if (el instanceof HTMLElement) {
+        el.tabIndex = -1;
+        el.focus({ preventScroll: true });
+    }
+};
+
+const resetScroll = (el: Element) => {
+    el.closest('[role="dialog"]')?.scrollTo({ top: 0, behavior: "instant" });
 };
 </script>
+
+<style lang="css" scoped>
+.slide-scale-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-scale-leave-active {
+    transition: all 0.2s ease-in;
+}
+
+.slide-scale-enter-from {
+    transform: translateX(calc(v-bind("direction") * 100%));
+}
+
+.slide-scale-leave-to {
+    transform: translateX(calc(v-bind("direction") * -100%));
+}
+</style>
