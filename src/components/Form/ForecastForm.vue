@@ -72,6 +72,7 @@
                                     name="weatherConditions"
                                     class="block w-full rounded-md border-0 p-2 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:max-w-md sm:text-sm leading-6"
                                     v-model="getLocationData(location.value).weatherConditions"
+                                    @change="onConditionChange(location.value)"
                                 >
                                     <option
                                         v-for="condition in weatherConditions"
@@ -83,25 +84,32 @@
                                 </select>
                             </div>
 
-                            <div
-                                v-for="field in temperatureFields"
-                                :key="field.value"
-                                class="flex flex-col gap-2"
-                            >
-                                <label :for="field.value" class="block text-sm font-medium">
-                                    {{ field.label }}
-                                </label>
+                            <template v-for="field in temperatureFields" :key="field.value">
                                 <div
-                                    class="rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus:ring-inset focus:ring-gray-600"
+                                    class="flex flex-col gap-2"
+                                    v-if="
+                                        !field.isRendered ||
+                                        field.isRendered(
+                                            getLocationData(location.value)['weatherConditions']
+                                                ?.value,
+                                        )
+                                    "
                                 >
-                                    <CommonInput
-                                        :placeholder="field.placeholderLabel"
-                                        :input-name="field.value"
-                                        :input-type="field.inputType"
-                                        v-model="getLocationData(location.value)[field.value]"
-                                    ></CommonInput>
+                                    <label :for="field.value" class="block text-sm font-medium">
+                                        {{ field.label }}
+                                    </label>
+                                    <div
+                                        class="rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus:ring-inset focus:ring-gray-600"
+                                    >
+                                        <CommonInput
+                                            :placeholder="field.placeholderLabel"
+                                            :input-name="field.value"
+                                            :input-type="field.inputType"
+                                            v-model="getLocationData(location.value)[field.value]"
+                                        ></CommonInput>
+                                    </div>
                                 </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -174,6 +182,7 @@ import SaveForecastButton from "@/components/Buttons/SaveForecastButton.vue";
 import { useWeatherDataProvider } from "@/composables/useWeatherDataProvider";
 import { createEmptyForecastDetails } from "@/stores/helpers/forecastDataHelpers";
 import { useForecastDataStore } from "@/stores/forecastData";
+import { isPrecipProbabilityFieldEnabled } from "./helpers/formFieldHelpers";
 import type { ForecastDataSchema, FormDataSchema, WeatherLocations } from "@/types";
 import { TypeOfMarkers } from "@/types";
 
@@ -181,7 +190,15 @@ const { locations, weatherConditions, windDirection } = useWeatherDataProvider()
 const temperatureLocations = locations.value.filter((elem) => elem.temp);
 const windLocations = locations.value.filter((elem) => elem.wind);
 
-const temperatureFields = [
+type InputField = {
+    label: string;
+    value: "tmax" | "tmin" | "precipProbability" | "snow" | "wmax" | "wmin";
+    placeholderLabel: string;
+    inputType: string;
+    isRendered?: (conditionValue: string | undefined) => boolean;
+};
+
+const temperatureFields: InputField[] = [
     {
         label: "Μεγ θερμοκρασία",
         value: "tmax",
@@ -195,13 +212,20 @@ const temperatureFields = [
         inputType: "number",
     },
     {
+        label: "Πιθανότητα υετού",
+        value: "precipProbability",
+        placeholderLabel: "Πιθανότητα υετού σε %",
+        inputType: "number",
+        isRendered: isPrecipProbabilityFieldEnabled,
+    },
+    {
         label: "Χιονόπτωση",
         value: "snow",
         placeholderLabel: "Σε m",
         inputType: "number",
     },
-] as const;
-const windFields = [
+];
+const windFields: InputField[] = [
     {
         label: "Μεγ άνεμος",
         value: "wmax",
@@ -227,6 +251,7 @@ const getLocationData = (locationValue: string): ForecastDataSchema => {
     }
     return locationData;
 };
+
 if (forecastDetails.dates.forecast_date === null) {
     const populateFormData = (locations: WeatherLocations[]) => {
         locations.forEach((element) => {
@@ -239,6 +264,7 @@ if (forecastDetails.dates.forecast_date === null) {
                 locationData.tmax = null;
                 locationData.tmin = null;
                 locationData.weatherConditions = null;
+                locationData.precipProbability = null;
             }
             if (element.wind) {
                 locationData.wmax = null;
@@ -264,4 +290,12 @@ watch(formData.dates, (newVal) => {
         formData.dates.forecast_end_hour = newVal.forecast_range[1] || "00:00";
     }
 });
+
+const onConditionChange = (locationValue: string) => {
+    const conditionValue = getLocationData(locationValue).weatherConditions?.value;
+    const shouldBeEnabled = isPrecipProbabilityFieldEnabled(conditionValue);
+    if (!shouldBeEnabled) {
+        getLocationData(locationValue).precipProbability = null;
+    }
+};
 </script>

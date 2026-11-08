@@ -17,7 +17,7 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
         {
             name: "Όρθρυς",
             value: "Orthris",
-            location: [22.692526, 39.016905],
+            location: [22.65207398785285, 39.02072440278998],
             wind: false,
             temp: true,
             snow: true,
@@ -25,7 +25,7 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
         {
             name: "Ανατολική Φθιώτιδα",
             value: "East",
-            location: [22.856371, 38.937402],
+            location: [22.806330019742713, 38.91246814511139],
             temp: true,
             wind: false,
             snow: true,
@@ -86,6 +86,20 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
             temp: false,
         },
         {
+            name: "Περιοχή Μαλιακού",
+            value: "Maliakos",
+            location: [22.60516214148766, 38.86432332239475],
+            wind: true,
+            temp: false,
+        },
+        {
+            name: "Περιοχή Ευβοϊκού",
+            value: "Evvoikos",
+            location: [23.160864151144647, 38.74918031933272],
+            wind: true,
+            temp: false,
+        },
+        {
             name: "Περιοχή Δομοκού",
             value: "Domokos",
             location: [22.462680353076728, 39.085151037874574],
@@ -100,23 +114,9 @@ export const useWeatherOptionsStore = defineStore("weatherOptions", () => {
             temp: false,
         },
         {
-            name: "Περιοχή Μαλιακού",
-            value: "Maliakos",
-            location: [22.60516214148766, 38.86432332239475],
-            wind: true,
-            temp: false,
-        },
-        {
             name: "Περιοχή Παρνασού",
             value: "Parnasos",
             location: [22.829551265109494, 38.6128697548764],
-            wind: true,
-            temp: false,
-        },
-        {
-            name: "Περιοχή Ευβοϊκού",
-            value: "Evvoikos",
-            location: [23.160233676129977, 38.70574931835848],
             wind: true,
             temp: false,
         },
